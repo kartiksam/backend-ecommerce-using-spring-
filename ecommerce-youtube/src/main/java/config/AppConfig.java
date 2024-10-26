@@ -15,6 +15,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import java.util.Arrays;
 import java.util.Collections;
 
+
 @Configuration
 public class AppConfig {  // Class name should start with uppercase
 
