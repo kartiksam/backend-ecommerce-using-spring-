@@ -3,6 +3,7 @@ package model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +47,11 @@ public class User {
     @OneToMany(mappedBy = "user",cascade=CascadeType.ALL)
    private List<Review> reviews=new ArrayList<>();
 
+private LocalDateTime createdAt;
+
+User(){
+
+}
 
 
 }
