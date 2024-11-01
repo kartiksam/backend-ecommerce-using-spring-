@@ -1,8 +1,7 @@
-package service;
+package com.kartik.ecommerce_youtube.service;
 
-import exception.UserException;
-import jdk.jshell.spi.ExecutionControl;
-import model.User;
+import com.kartik.ecommerce_youtube.exception.UserException;
+import com.kartik.ecommerce_youtube.model.User;
 import org.springframework.stereotype.Service;
 
 @Service

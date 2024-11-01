@@ -1,12 +1,12 @@
-package service;
+package com.kartik.ecommerce_youtube.service;
 
-import model.User;
+import com.kartik.ecommerce_youtube.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import repository.UserRepository;
+import com.kartik.ecommerce_youtube.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package config;
+package com.kartik.ecommerce_youtube.config;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;

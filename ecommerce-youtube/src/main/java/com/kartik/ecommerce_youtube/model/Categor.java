@@ -1,10 +1,11 @@
-package model;
+package com.kartik.ecommerce_youtube.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
+@Table(name = "category")
 public class Categor {
 
     @Id

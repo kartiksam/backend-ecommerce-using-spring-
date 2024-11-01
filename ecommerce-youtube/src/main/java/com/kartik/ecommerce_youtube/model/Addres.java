@@ -1,9 +1,10 @@
-package model;
+package com.kartik.ecommerce_youtube.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "address")
 public class Addres {
 @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,7 +30,7 @@ public class Addres {
     private String zipCode;
 
 //    user and address relation one to many one user have multi address   but addressa and user realtion many to one
-    @ManyToMany
+    @ManyToOne
     @JoinColumn(name="user_id")
     @JsonIgnore
     private User user;

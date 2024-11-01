@@ -1,4 +1,4 @@
-package config;
+package com.kartik.ecommerce_youtube.config;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -13,6 +13,7 @@ import java.util.Date;
 public class JwtProvider {
 //to generate toker like in node in node we have no types
 SecretKey key= Keys.hmacShaKeyFor(JwtConstant.SECRET_KEY.getBytes());
+
     public String generateToken(Authentication auth){
         String jwt= Jwts.builder()
                 .setIssuedAt(new Date())

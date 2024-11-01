@@ -1,4 +1,4 @@
-package model;
+package com.kartik.ecommerce_youtube.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "review")
 public class Review {
 
     @Id

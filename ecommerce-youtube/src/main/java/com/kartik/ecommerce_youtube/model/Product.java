@@ -1,7 +1,6 @@
-package model;
+package com.kartik.ecommerce_youtube.model;
 
 import jakarta.persistence.*;
-import jdk.jfr.Category;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -10,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
+@Table(name = "product")
 public class Product {
 
     Product(){

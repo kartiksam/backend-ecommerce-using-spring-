@@ -1,4 +1,4 @@
-package model;
+package com.kartik.ecommerce_youtube.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
