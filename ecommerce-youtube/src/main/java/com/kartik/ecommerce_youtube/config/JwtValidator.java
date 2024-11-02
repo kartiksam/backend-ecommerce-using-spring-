@@ -19,6 +19,10 @@ import javax.crypto.SecretKey;
 import java.io.IOException;
 import java.util.List;
 
+
+
+//like middleware same
+
 public class JwtValidator extends OncePerRequestFilter {
 
     @Override
