@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-//two thuings need tpo menyion foer whiuch class and in them id its type
+//two things need tpo menntion for which class and in them id its type
 public interface UserRepository extends JpaRepository<User,Long>
 {
 

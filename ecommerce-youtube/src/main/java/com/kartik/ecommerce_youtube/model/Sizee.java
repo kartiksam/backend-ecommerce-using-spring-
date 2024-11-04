@@ -2,12 +2,14 @@ package com.kartik.ecommerce_youtube.model;
 //no need to make entity bcz already embedded it is
 
 public class Sizee {
-    private String name;
-    private int quantity;
+
+
 
     public Sizee(){
 
     }
+    private String name;
+    private int quantity;
     public String getName() {
         return name;
     }
