@@ -12,7 +12,7 @@ import java.util.Set;
 @Table(name = "product")
 public class Product {
 
-    Product(){
+    public Product(){
 
     }
 

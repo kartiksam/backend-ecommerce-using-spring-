@@ -8,9 +8,15 @@ import com.kartik.ecommerce_youtube.repository.CategoryRepository;
 import com.kartik.ecommerce_youtube.repository.ProductRepository;
 import com.kartik.ecommerce_youtube.request.CreateProductRequest;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 //implemt prouct service interface and it will be service because here we are going to write all our business logic
@@ -43,7 +49,7 @@ public class ProductServiceimple implements ProductService{
 
         }
 
-        Categor secondLevel=categoryRepository.findByNameAndParant(req.getSecondLevelCategory(), topLevel.getName());
+        Categor secondLevel=categoryRepository.findByNameAndParent(req.getSecondLevelCategory(), topLevel.getName());
 
         if(secondLevel==null){
             Categor secondLevelCategry=new Categor();
@@ -55,7 +61,7 @@ public class ProductServiceimple implements ProductService{
 
         }
 
-        Categor thirdLevel=categoryRepository.findByNameAndParant(req.getThirdLevelCategory(),secondLevel.getName());
+        Categor thirdLevel=categoryRepository.findByNameAndParent(req.getThirdLevelCategory(),secondLevel.getName());
 
         if(thirdLevel==null){
             Categor thirdLevelCategry=new Categor();
@@ -67,24 +73,53 @@ public class ProductServiceimple implements ProductService{
 
         }
 
+Product product=new Product();
+        product.setTitle(req.getTitle());
+        product.setColor(req.getColor());
+        product.setDescription(req.getDescription());
+        product.setDiscountedPrice(req.getDiscountedPrice());
+        product.setDiscountPersent(req.getDiscountPersent());
+        product.setImageUrl(req.getImageUrl());
+        product.setBrand(req.getBrand());
+product.setPrice(req.getPrice());
+product.setSizes(req.getSize());
+product.setQuantity(req.getQuantity());
+product.setCategory(thirdLevel);
+product.setCreatedAt(LocalDateTime.now());
 
-
-        return null;
+//save the product
+        Product savedProduct=productRepository.save(product);
+        return savedProduct;
     }
 
     @Override
     public String deleteProduct(Long productid) throws ProductException {
-        return "";
+        Product product=findProductById(productid);
+//        delete then all sizes will be clear
+        product.getSizes().clear();
+        productRepository.delete(product);
+        return "product deleted succesfully";
     }
 
     @Override
-    public Product updateProduct(Long productid, Product product) throws ProductException {
-        return null;
+    public Product updateProduct(Long productid, Product req) throws ProductException {
+        Product product=findProductById(productid);
+        if(req.getQuantity()!=0){
+            product.setQuantity(req.getQuantity());
+        }
+
+        return productRepository.save(product);
     }
 
     @Override
     public Product findProductById(Long id) throws ProductException {
-        return null;
+        Optional<Product> opt=productRepository.findById(id);
+
+        if(opt.isPresent()){
+            return opt.get();
+        }
+
+throw new ProductException("Product not found with id "+id);
     }
 
     @Override
@@ -94,6 +129,33 @@ public class ProductServiceimple implements ProductService{
 
     @Override
     public Page<Product> getAllProduct(String category, List<String> colors, List<String> sizes, Integer minPrice, Integer maxPrice, Integer minDisc, String sort, String stock, Integer pageNumber, Integer pageSize) {
-        return null;
+
+        Pageable pageable= PageRequest.of(pageNumber,pageSize);
+
+//        all methods ina bovbe we have done query using auto jpa methods
+//        but this method we have written query accv to our need
+
+        List<Product> products=productRepository.filterProducts(category,minPrice,maxPrice,minDisc,sort);
+
+//        if not empty
+        if(!colors.isEmpty()){
+            products=products.stream().filter(p->colors.stream().anyMatch(c->c.equalsIgnoreCase(p.getColor())))
+                    .collect(Collectors.toList());
+        }
+if(stock!=null){
+    if(stock.equals("in_stock")){
+        products=products.stream().filter(p->p.getQuantity()>0).collect(Collectors.toList());
+    }else if(stock.equals("out_of_stock")){
+        products=products.stream().filter(p->p.getQuantity()<1).collect(Collectors.toList());
+
+    }
+}
+int si=(int) pageable.getOffset();
+//1page =10products page no2 1page =10pro ei=pageno 1=11
+        int ei=Math.min(si+pageable.getPageSize(),products.size());
+        List<Product> pageContent=products.subList(si,ei);
+        Page<Product> filteredProducts=new PageImpl<>(pageContent,pageable,products.size());
+
+return filteredProducts;
     }
 }

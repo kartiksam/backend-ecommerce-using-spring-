@@ -15,7 +15,7 @@ public interface ProductService {
 
     public String deleteProduct(Long productid) throws ProductException;
 
-    public Product updateProduct(Long productid,Product product) throws ProductException;
+    public Product updateProduct(Long productid,Product req) throws ProductException;
 
     public Product findProductById(Long id) throws ProductException;
 
