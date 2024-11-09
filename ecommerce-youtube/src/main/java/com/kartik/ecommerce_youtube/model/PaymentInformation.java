@@ -10,6 +10,7 @@ public class PaymentInformation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // or GenerationType.AUTO
     private Long id; // This is
+
     @Column(name="cardholder_name")
     private String cardHolderName;
 

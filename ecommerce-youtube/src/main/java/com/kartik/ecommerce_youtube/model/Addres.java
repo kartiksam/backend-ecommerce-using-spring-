@@ -30,6 +30,10 @@ public class Addres {
     private String zipCode;
 
 //    user and address relation one to many one user have multi address   but addressa and user realtion many to one
+//    @ManyToOne: Defines a many-to-one relationship with the User entity. This means that multiple Address entries can be associated with a single User.
+//   col with user_id exist ina drress tab;le @JoinColumn(name="user_id"): Specifies that the foreign key in the address table for this relationship is user_id.
+//    @JsonIgnore: Ensures that when this entity is serialized to JSON, the user field is ignored, which can prevent circular references or limit sensitive data exposure.
+//abhi tk signup or login others apis need tot est
     @ManyToOne
     @JoinColumn(name="user_id")
     @JsonIgnore
