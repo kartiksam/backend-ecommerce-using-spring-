@@ -13,13 +13,13 @@ import java.util.List;
 public class OrderServiceImple implements OrderService {
 
   private CartRepository cartRepository;
-  private CartItemSrvice cartItemSrvice;
+  private CartItemService cartItemService;
   private ProductService productService;
 
-    public OrderServiceImple(CartRepository cartRepository, CartItemSrvice cartItemSrvice,
+    public OrderServiceImple(CartRepository cartRepository, CartItemService cartItemService,
                              ProductService productService) {
         this.cartRepository = cartRepository;
-        this.cartItemSrvice = cartItemSrvice;
+        this.cartItemService = cartItemService;
         this.productService = productService;
     }
 
