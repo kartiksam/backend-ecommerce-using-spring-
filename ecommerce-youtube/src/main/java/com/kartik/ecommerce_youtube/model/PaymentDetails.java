@@ -1,9 +1,14 @@
 package com.kartik.ecommerce_youtube.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
-@Entity
+
 public class PaymentDetails {
+
+
 
     private String paymentMethod;
     private String paymentStatus;
@@ -11,7 +16,7 @@ public class PaymentDetails {
     private String razorpayPaymentLinkId;
     private String razorpayPaymentLinkReferenceId;
     private String razorpayPaymentLinkStatus;
-    private String razorpayPaymentd;
+    private String razorpayPaymentId;
 
     public PaymentDetails() {
     }
@@ -65,21 +70,21 @@ public class PaymentDetails {
     }
 
     public String getRazorpayPaymentd() {
-        return razorpayPaymentd;
+        return razorpayPaymentId;
     }
 
     public void setRazorpayPaymentd(String razorpayPaymentd) {
-        this.razorpayPaymentd = razorpayPaymentd;
+        this.razorpayPaymentId = razorpayPaymentd;
     }
 
     public PaymentDetails(String paymentMethod, String paymentStatus, String paymentId, String razorpayPaymentLinkId, String razorpayPaymentLinkReferenceId,
-                          String razorpayPaymentLinkStatus, String razorpayPaymentd) {
+                          String razorpayPaymentLinkStatus, String razorpayPaymentId) {
         this.paymentMethod = paymentMethod;
         this.paymentStatus = paymentStatus;
         this.paymentId = paymentId;
         this.razorpayPaymentLinkId = razorpayPaymentLinkId;
         this.razorpayPaymentLinkReferenceId = razorpayPaymentLinkReferenceId;
         this.razorpayPaymentLinkStatus = razorpayPaymentLinkStatus;
-        this.razorpayPaymentd = razorpayPaymentd;
+        this.razorpayPaymentId = razorpayPaymentId;
     }
 }
