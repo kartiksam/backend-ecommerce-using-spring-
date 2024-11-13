@@ -1,4 +1,5 @@
 package com.kartik.ecommerce_youtube.request;
+//like dtos
 
 public class AddItemRequest {
 

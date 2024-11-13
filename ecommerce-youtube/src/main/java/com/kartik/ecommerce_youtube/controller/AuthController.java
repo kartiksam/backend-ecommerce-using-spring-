@@ -3,6 +3,7 @@ package com.kartik.ecommerce_youtube.controller;
 import com.kartik.ecommerce_youtube.config.JwtProvider;
 import com.kartik.ecommerce_youtube.exception.UserException;
 import com.kartik.ecommerce_youtube.model.User;
+import com.kartik.ecommerce_youtube.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -11,10 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.kartik.ecommerce_youtube.repository.UserRepository;
 import com.kartik.ecommerce_youtube.request.LoginRequest;
 import com.kartik.ecommerce_youtube.response.AuthResponse;
@@ -30,6 +28,7 @@ public class AuthController {
     private JwtProvider jwtProvider;
     private PasswordEncoder passwordEncoder;
     private CustomUserServiceImple customUserServiceImple;
+    private UserService userService;
 
     public AuthController(UserRepository userRepo, JwtProvider jwtProvider, PasswordEncoder passwordEncoder, CustomUserServiceImple customUserServiceImple) {
         this.userRepo = userRepo;
@@ -92,6 +91,26 @@ public class AuthController {
         return  new ResponseEntity<AuthResponse>(authResponse, HttpStatus.CREATED);
 
     }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<User> getUserById(@PathVariable Long userId) throws UserException {
+        User user = userService.findUserById(userId);
+        return ResponseEntity.ok(user);
+    }
+
+
+    @GetMapping("/profile")
+    public ResponseEntity<User> getUserProfile(@RequestHeader("Authorization") String jwt) throws UserException {
+        User user = userService.findUserByJwt(jwt);
+        return ResponseEntity.ok(user);
+    }
+
+
+
+
+
+
+
 
     private Authentication authenticate(String username, String password) {
 //        will chk password match or not these kind of stuff
