@@ -5,7 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
-
+//jb embbedded no need entuity and primnary key
 public class PaymentDetails {
 
 

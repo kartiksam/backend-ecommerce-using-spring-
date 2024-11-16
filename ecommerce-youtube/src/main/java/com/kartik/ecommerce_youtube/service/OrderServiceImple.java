@@ -2,9 +2,11 @@ package com.kartik.ecommerce_youtube.service;
 
 import com.kartik.ecommerce_youtube.exception.OrderException;
 import com.kartik.ecommerce_youtube.model.*;
-import com.kartik.ecommerce_youtube.repository.CartRepository;
 import com.kartik.ecommerce_youtube.repository.OrderRepository;
+import com.kartik.ecommerce_youtube.repository.UserRepository;
+import com.kartik.ecommerce_youtube.repository.CartRepository;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -12,18 +14,23 @@ import java.util.Optional;
 @Service
 public class OrderServiceImple implements OrderService {
 
-    private final CartRepository cartRepository;
     private final OrderRepository orderRepository;
+    private final UserRepository userRepository; // Assuming you have a UserRepository
+    private final CartRepository cartRepository;  // Assuming you have a CartRepository
 
-    public OrderServiceImple(CartRepository cartRepository, OrderRepository orderRepository) {
-        this.cartRepository = cartRepository;
+    public OrderServiceImple(OrderRepository orderRepository, UserRepository userRepository, CartRepository cartRepository) {
         this.orderRepository = orderRepository;
+        this.userRepository = userRepository;
+        this.cartRepository = cartRepository;
     }
 
     @Override
-    public Order createOrder(User user, Addres shippingAddress) {
+    public Order createOrder(User user, Addres shippingAddress) throws OrderException {
         // Fetch the cart for the user
         Cart cart = cartRepository.findByUserId(user.getId());
+        if (cart == null || cart.getCartItems().isEmpty()) {
+            throw new OrderException("Cart is empty or not found for the user.");
+        }
 
         // Create a new Order instance
         Order order = new Order();
@@ -60,8 +67,11 @@ public class OrderServiceImple implements OrderService {
 
     @Override
     public Order findOrderById(Long orderId) throws OrderException {
-        return orderRepository.findById(orderId)
-                .orElseThrow(() -> new OrderException("Order not found with ID: " + orderId));
+        Optional<Order> order = orderRepository.findById(orderId);
+        if (order.isEmpty()) {
+            throw new OrderException("Order not found for ID: " + orderId);
+        }
+        return order.get();
     }
 
     @Override
@@ -71,27 +81,37 @@ public class OrderServiceImple implements OrderService {
 
     @Override
     public Order placedOrder(Long orderId) throws OrderException {
-        return updateOrderStatus(orderId, "PLACED");
+        Order order = findOrderById(orderId);
+        order.setOrderStatus("PLACED");
+        return orderRepository.save(order);
     }
 
     @Override
     public Order confirmedOrder(Long orderId) throws OrderException {
-        return updateOrderStatus(orderId, "CONFIRMED");
+        Order order = findOrderById(orderId);
+        order.setOrderStatus("CONFIRMED");
+        return orderRepository.save(order);
     }
 
     @Override
     public Order shippedOrder(Long orderId) throws OrderException {
-        return updateOrderStatus(orderId, "SHIPPED");
+        Order order = findOrderById(orderId);
+        order.setOrderStatus("SHIPPED");
+        return orderRepository.save(order);
     }
 
     @Override
     public Order deliveredOrder(Long orderId) throws OrderException {
-        return updateOrderStatus(orderId, "DELIVERED");
+        Order order = findOrderById(orderId);
+        order.setOrderStatus("DELIVERED");
+        return orderRepository.save(order);
     }
 
     @Override
     public Order cancellledOrder(Long orderId) throws OrderException {
-        return updateOrderStatus(orderId, "CANCELLED");
+        Order order = findOrderById(orderId);
+        order.setOrderStatus("CANCELLED");
+        return orderRepository.save(order);
     }
 
     @Override
@@ -105,12 +125,8 @@ public class OrderServiceImple implements OrderService {
         orderRepository.delete(order);
     }
 
-    private Order updateOrderStatus(Long orderId, String status) throws OrderException {
-        Order order = findOrderById(orderId);
-        order.setOrderStatus(status);
-        if ("DELIVERED".equals(status)) {
-            order.setDeliveryDate(LocalDateTime.now());
-        }
-        return orderRepository.save(order);
+    @Override
+    public User getUserById(Long userId) {
+        return userRepository.findById(userId).orElse(null);
     }
 }
