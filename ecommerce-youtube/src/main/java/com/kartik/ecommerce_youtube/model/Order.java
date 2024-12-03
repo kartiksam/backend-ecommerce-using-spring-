@@ -1,57 +1,62 @@
 package com.kartik.ecommerce_youtube.model;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "orders")
 public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "order_id")
+    @Column(name = "order_id", nullable = false)
     private String orderId;
 
-
-//    one user have many orders but one order have only one user
+    // One user can have many orders, but one order belongs to only one user
     @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
+    // One order can have many order items
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItem> orderItems = new ArrayList<>();
 
-//    one order hve many items like watcgh,earphone,
-    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL)
-    private List<OrderItem> orderItems=new ArrayList<>();
-
-
+    @Column(name = "order_date")
     private LocalDateTime orderDate;
 
-
+    @Column(name = "delivery_date")
     private LocalDateTime deliveryDate;
 
-//    address relation -one tonone one order deliver to one address not many address
+    // One order has one shipping address
     @OneToOne
-    private Addres shippingAddress;
-
+    @JoinColumn(name = "shipping_address_id", referencedColumnName = "id")
+    private Addres shippingAddress; // Assuming the entity name is Addres
 
     @Embedded
-    private PaymentDetails paymentDetails=new PaymentDetails();
+    private PaymentDetails paymentDetails = new PaymentDetails();
 
+    @Column(name = "total_price")
     private double totalPrice;
 
+    @Column(name = "total_discounted_price")
     private Integer totalDiscountedPrice;
 
     private Integer discount;
 
-    private String OrderStatus;
+    @Column(name = "order_status", nullable = false)
+    private String orderStatus;
 
+    @Column(name = "total_items")
     private int totalItems;
 
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -141,11 +146,11 @@ public class Order {
     }
 
     public String getOrderStatus() {
-        return OrderStatus;
+        return orderStatus;
     }
 
     public void setOrderStatus(String orderStatus) {
-        OrderStatus = orderStatus;
+        this.orderStatus = orderStatus;
     }
 
     public int getTotalItems() {

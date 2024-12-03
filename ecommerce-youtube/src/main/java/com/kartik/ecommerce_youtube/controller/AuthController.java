@@ -2,8 +2,11 @@ package com.kartik.ecommerce_youtube.controller;
 
 import com.kartik.ecommerce_youtube.config.JwtProvider;
 import com.kartik.ecommerce_youtube.exception.UserException;
+import com.kartik.ecommerce_youtube.model.Cart;
 import com.kartik.ecommerce_youtube.model.User;
+import com.kartik.ecommerce_youtube.service.CartSrvice;
 import com.kartik.ecommerce_youtube.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -23,19 +26,30 @@ import com.kartik.ecommerce_youtube.service.CustomUserServiceImple;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-
+@Autowired
     private UserRepository userRepo;
+    @Autowired
     private JwtProvider jwtProvider;
+    @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
     private CustomUserServiceImple customUserServiceImple;
+    @Autowired
     private UserService userService;
+    @Autowired
+    private CartSrvice cartSrvice;
 
-    public AuthController(UserRepository userRepo, JwtProvider jwtProvider, PasswordEncoder passwordEncoder, CustomUserServiceImple customUserServiceImple) {
+    public AuthController(UserRepository userRepo, JwtProvider jwtProvider,
+                          PasswordEncoder passwordEncoder, CustomUserServiceImple customUserServiceImple,
+                          UserService userService, CartSrvice cartSrvice) {
         this.userRepo = userRepo;
         this.jwtProvider = jwtProvider;
         this.passwordEncoder = passwordEncoder;
         this.customUserServiceImple = customUserServiceImple;
+        this.userService = userService;
+        this.cartSrvice = cartSrvice;
     }
+
 
     @PostMapping("/signup")
     public ResponseEntity<AuthResponse> createUserHandler(@RequestBody User user) throws UserException{
@@ -62,6 +76,8 @@ public class AuthController {
     createdUser.setLastName(lastNString);
 
     User savedUser=userRepo.save(createdUser);
+
+    Cart cart=cartSrvice.createCart(savedUser);
 
     Authentication authentication=new UsernamePasswordAuthenticationToken(savedUser.getEmail(),savedUser.getPassword());
 
